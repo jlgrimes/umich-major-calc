@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UMich Major Calc</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="source.js"></script>
+    <script src="reqs.js"></script>
+    <script src="cookies.js"></script>
+</head>
+<body>
+    <p>Enter a list of classes</p>
+    <textarea class="materialize-textarea" id="classes"></textarea>
+    <button class="waves-effect waves-light btn" onclick="compute()">Click</button>
+    <button class="waves-effect waves-light btn" onclick="setCache()">Save</button>
+    <button class="waves-effect waves-light btn" onclick="parseCache()">Open</button>
+
+    <div class="output"></div>
+</body>
+</html>
