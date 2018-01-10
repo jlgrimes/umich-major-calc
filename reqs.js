@@ -1,16 +1,18 @@
 var majors = {
     CS: {
-        reqs: function(classes){
-            majors.CS.applicableCredits += engrCore(classes);
-            majors.CS.applicableCredits += engrScience(classes);
-            majors.CS.applicableCredits += math(classes);
+        reqs: function(){
+            majors.CS.applicableCredits += engrCore();
+            majors.CS.applicableCredits += engrScience();
+            majors.CS.applicableCredits += math();
+            majors.CS.applicableCredits += CSCore();
+            majors.CS.applicableCredits += EECSMDE();
         },
 
         applicableCredits: 0
     }
 };
 
-function engrCore(classes)
+function engrCore()
 {
     var n = 0;
 
@@ -22,7 +24,7 @@ function engrCore(classes)
     return n;
 }
 
-function engrScience(classes)
+function engrScience()
 {
     var n = 0;
 
@@ -42,60 +44,23 @@ function engrScience(classes)
     return n;
 }
 
-function math(classes)
-{
+function math() {
+    return (incl(["MATH 115", "MATH 120"], 4)
+            + incl(["MATH 116", "MATH 121"], 4)
+            + incl(["MATH 214", "MATH 217", "MATH 417"], 4)
+            + incl(["MATH 215", "MATH 216"], 4));
+}
+
+function CSCore() {
+    return (incl(["EECS 203", "MATH 465", "MATH 565"], 4)
+            + incl("TCHNCLCM 300", 1) + parseDB("CS"));
+}
+
+function EECSMDE() {
     var n = 0;
-
-    if (classes.includes("MATH 115") || classes.includes("MATH 120"))
-        n += 4;
-    if (classes.includes("MATH 116") || classes.includes("MATH 121"))
-        n += 4;
-    if (classes.includes("MATH 214") || classes.includes("MATH 217") || classes.includes("MATH 417"))
-        n += 4;
-    if (classes.includes("MATH 215") || classes.includes("MATH 216"))
-        n += 4;
-
+    if (classes.includes("EECS 496"))
+        n += 2;
+    if (classes.includes("TCHNCLCM 497"))
+        n += 2;
     return n;
-}
-
-
-
-
-
-
-var required = [
-    {
-        name: "CS",
-        required: ["ENGR 100", "PHYSICS 140", "PHYSICS 141", "PHYSICS 240", "PHYSICS 241",
-                    "EECS 280", "EECS 281", "EECS 370", "EECS 376", "EECS 496", "TCHNCLCM 300"]
-    }
-];
-
-function findMajor(courseName)
-{
-    for (var i in required)
-        if (required[i].name == courseName)
-            return i;
-}
-
-function oneReqs (classes, courseName) { // the classes that are only ONE class to fufill a requirement
-    var majorRequiredLength = findMajor(courseName).required.length;
-    for (var i = 0; i < required[majorRequiredLength]; i++)
-        if (classes.indexOf(required[i]) < 0)
-            $('.output').append("<p>" + required[i] + "</p>");
-}
-
-function mathReq (classes) {
-    if (classes.indexOf("MATH 115") < 0 && classes.indexOf("MATH 120") < 0)
-        $('.output').append("<p>MATH 115 or MATH 120</p>");
-
-    if (classes.indexOf("MATH 116") < 0 && classes.indexOf("MATH 121") < 0)
-        $('.output').append("<p>MATH 116 or MATH 121</p>");
-
-    if (classes.indexOf("MATH 214") < 0 && classes.indexOf("MATH 217") < 0 && classes.indexOf("MATH 417") < 0 && classes.indexOf("MATH 419") < 0)
-        $('.output').append("<p>MATH 214, 217, 417, or 419</p>");
-}
-
-function CS (classes) {
-    mathReq(classes);
 }
