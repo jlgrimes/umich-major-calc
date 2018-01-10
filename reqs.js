@@ -1,47 +1,29 @@
 var majors = {
     CS: {
         reqs: function(){
-            majors.CS.applicableCredits += engrCore();
-            majors.CS.applicableCredits += engrScience();
-            majors.CS.applicableCredits += math();
-            majors.CS.applicableCredits += CSCore();
-            majors.CS.applicableCredits += EECSMDE();
+            majors.CS.applicableCredits += engrCore()
+                                        + engrScience()
+                                        + math()
+                                        + stats()
+                                        + CSCore()
+                                        + EECSMDE();
         },
 
         applicableCredits: 0
     }
 };
 
-function engrCore()
-{
-    var n = 0;
-
-    if (classes.includes("ENGR 100"))
-        n += 4;
-    if (classes.includes("ENGR 101") || classes.includes("ENGR 151"))
-        n += 4;
-
-    return n;
+function engrCore() {
+    return (incl("ENGR 100", 4) + incl(["ENGR 101", "ENGR 151"], 4));
 }
 
-function engrScience()
-{
-    var n = 0;
-
-    if (classes.includes("CHEM 130") || classes.includes("CHEM 210"))
-        n += 3;
-    if (classes.includes("CHEM 125") || classes.includes("CHEM 126"))
-        n += 2;
-    if (classes.includes("PHYSICS 140"))
-        n += 3;
-    if (classes.includes("PHYSICS 141"))
-        n += 2;
-    if (classes.includes("PHYSICS 240"))
-        n += 3;
-    if (classes.includes("PHYSICS 241"))
-        n += 2;
-
-    return n;
+function engrScience() {
+    return (incl(["CHEM 130", "CHEM 210"], 3)
+            + incl(["CHEM 125", "CHEM 216", "CHEM 211"], 2)
+            + incl("PHYSICS 140", 3)
+            + incl("PHYSICS 141", 2)
+            + incl("PHYSICS 240", 3)
+            + incl("PHYSICS 241", 2));
 }
 
 function math() {
@@ -51,16 +33,15 @@ function math() {
             + incl(["MATH 215", "MATH 216"], 4));
 }
 
+function stats() {
+    return (incl(["STATS 250", "STATS 280", "STATS 412", "STATS 426", "EECS 301", "EECS 401", "IOE 265"], 3));
+}
+
 function CSCore() {
     return (incl(["EECS 203", "MATH 465", "MATH 565"], 4)
             + incl("TCHNCLCM 300", 1) + parseDB("CS"));
 }
 
 function EECSMDE() {
-    var n = 0;
-    if (classes.includes("EECS 496"))
-        n += 2;
-    if (classes.includes("TCHNCLCM 497"))
-        n += 2;
-    return n;
+    return (incl("EECS 496", 2) + incl("TCHCLCM 497", 2));
 }
