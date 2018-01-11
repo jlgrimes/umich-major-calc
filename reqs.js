@@ -45,3 +45,11 @@ function CSCore() {
 function EECSMDE() {
     return (incl("EECS 496", 2) + incl("TCHCLCM 497", 2));
 }
+
+function CSEFlexTechs() {
+    for (var i in classes){ // sorts through remaining classes
+        var subject = i.substr(0, i.indexOf(' '));
+        if (subject in flexTechs);
+
+    }
+}

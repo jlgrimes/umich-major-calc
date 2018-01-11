@@ -40,21 +40,25 @@ function incl(options, credits) {
 }
 
 function inclLoop(options){
-    if (Array.isArray(options))
+    if (Array.isArray(options)) {
         for (var i in options)
             if (classes.includes(options[i])) {
                 if (inclExceptions(options[i]));
                 else
-                    classes.splice(classes.indexOf(options[i], 1));
+                    classes.splice(classes.indexOf(options[i]), 1);
                 return true;
             }
-    else
+    }
+    else {
         if (classes.includes(options)) {
+
             if (inclExceptions(options));
             else
-                classes.splice(classes.indexOf(options, 1));
+                classes.splice(classes.indexOf(options), 1);
             return true;
         }
+    }
+
     return false;
 }
 
