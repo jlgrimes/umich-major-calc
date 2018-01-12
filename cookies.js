@@ -9,8 +9,6 @@ function setCache() {
     for (i = 0; i < lines.length; i++)
         cvalue += lines[i] + "~";
 
-    alert(cvalue);
-
     localStorage.setItem("courses", cvalue);
 
     Materialize.toast("Courses saved!", 4000);
@@ -25,4 +23,6 @@ function parseCache()
     $("#classes").empty();
     $("#classes").val(lines);
     $('#classes').trigger('autoresize');
+
+    Materialize.toast("Courses opened!", 4000);
 }

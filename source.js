@@ -11,7 +11,7 @@ function compute() {
         majors[i].reqs(classes);
     }
 
-    $(".output").append("<div>" + majors.CS.applicableCredits + "<div>");
+    $(".output").append("<div>Total CS Credits: " + majors.CS.applicableCredits + "<div>");
 }
 
 function storeClasses() {
@@ -43,9 +43,11 @@ function inclLoop(options){
     if (Array.isArray(options)) {
         for (var i in options)
             if (classes.includes(options[i])) {
+
                 if (inclExceptions(options[i]));
                 else
                     classes.splice(classes.indexOf(options[i]), 1);
+
                 return true;
             }
     }
@@ -55,6 +57,7 @@ function inclLoop(options){
             if (inclExceptions(options));
             else
                 classes.splice(classes.indexOf(options), 1);
+
             return true;
         }
     }
@@ -62,11 +65,22 @@ function inclLoop(options){
     return false;
 }
 
-function parseDB(db) {
+function parseDB(db, prefix) {
     var n = 0;
-    for (var i in window[db].nums)
-        if (classes.includes(window[db].prefix + " " + window[db].nums[i]))
+    for (var i in db.nums) {
+        //alert(prefix + " " + db.nums[i]);
+        if (classes.includes(prefix + " " + db.nums[i])) {
+            classes.splice(classes.indexOf(prefix + " " + prefix), 1);
             n += 4;
-
+        }
+    }
     return n;
+}
+
+function cCap(obj) {
+    return Math.min(obj.func(), obj.max);
+}
+
+function findCourse(arr, subject) {
+    return (arr[0] == subject);
 }
