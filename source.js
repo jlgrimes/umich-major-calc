@@ -1,6 +1,7 @@
 var classes = [];
 
 function compute() {
+    alert(courses.credits("ENGR 100"));
     $(".output").empty();
     for (var i in majors)
         majors[i].applicableCredits = 0; // reinitializes applicable credit count
@@ -30,12 +31,12 @@ function inclExceptions(name) { // if the class can roll over to other requireme
     return bool;
 }
 
-function incl(options, credits) {
+function incl(options) {
     if (classes.length == 0)
         return 0;
 
     if(inclLoop(options))
-        return credits;
+        return courses.credits();
     return 0;
 }
 
@@ -79,8 +80,4 @@ function parseDB(db, prefix) {
 
 function cCap(obj) {
     return Math.min(obj.func(), obj.max);
-}
-
-function findCourse(arr, subject) {
-    return (arr[0] == subject);
 }
