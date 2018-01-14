@@ -1,7 +1,7 @@
 var classes = [];
 
 function compute() {
-    alert(courses.credits("ENGR 100"));
+    alert(courses.credits("LING 367"));
     $(".output").empty();
     for (var i in majors)
         majors[i].applicableCredits = 0; // reinitializes applicable credit count
@@ -20,50 +20,32 @@ function storeClasses() {
         classes = $("#classes").val().split('\n');
 }
 
-function inclExceptions(name) { // if the class can roll over to other requirements
-    var bool = false;
-    var CSexceptions = ["CHEM 210", "CHEM 211", "MATH 215", "MATH 216"];
-
-    for (var i in CSexceptions) // ONLY WORKS FOR CS RIGHT NOW
-        if (name == CSexceptions[i])
-            bool = true;
-
-    return bool;
-}
-
 function incl(options) {
     if (classes.length == 0)
         return 0;
 
-    if(inclLoop(options))
-        return courses.credits();
-    return 0;
+    return (inclLoop(options));
 }
 
 function inclLoop(options){
     if (Array.isArray(options)) {
-        for (var i in options)
+        for (var i in options) {
             if (classes.includes(options[i])) {
 
-                if (inclExceptions(options[i]));
-                else
-                    classes.splice(classes.indexOf(options[i]), 1);
+                classes.splice(classes.indexOf(options[i]), 1);
 
-                return true;
+                return courses.credits(options[i]);
             }
+        }
     }
     else {
         if (classes.includes(options)) {
-
-            if (inclExceptions(options));
-            else
-                classes.splice(classes.indexOf(options), 1);
-
-            return true;
+            classes.splice(classes.indexOf(options), 1);
+            return courses.credits(options);
         }
     }
 
-    return false;
+    return 0;
 }
 
 function parseDB(db, prefix) {

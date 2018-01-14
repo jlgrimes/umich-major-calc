@@ -20,13 +20,10 @@ var courses = {
     credits: function(course) {
         if (courses.includesSubject(course))
             for (var req in courses[courses.subject(course).toLowerCase()]) {
-            alert(req);
                 if (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] == courses.number(course)) != null) {
-                    alert();
-                    alert(courses[courses.subject(course).toLowerCase()][req].find(o => o[0] == courses.number(course))[1]);
+                    return (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] == courses.number(course))[1]);
                 }
             }
-        return (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] == courses.number(course))[1]);
     },
     aas: {
         humanities : [[104, 3], [111, 4], [208, 4], [245, 4], [338, 3], [384, 3], [385, 3]]
@@ -272,7 +269,7 @@ var c = {
         name: "Engineering Core",
         max: 8,
         func: function() {
-            return (incl("ENGR 100", 4) + incl(["ENGR 101", "ENGR 151"], 4));
+            return (incl("ENGR 100") + incl(["ENGR 101", "ENGR 151"]));
         }
     },
     engrScience: {
@@ -328,10 +325,10 @@ var c = {
                 var subject = classes[i].substr(0, classes[i].indexOf(' '));
                 var number = parseInt(classes[i].substr(classes[i].indexOf(' ') + 1, classes[i].length - 1));
                 if ("humanities" in subject.toLowerCase()) {
-                    if (subject.toLowerCase().find(findCourse)[0] == number) {
+                    if (subject.toLowerCase().find(courses.findCourse)[0] == number) {
                         classes.splice(i, 1);
                         i--;
-                        n += subject.toLowerCase().find(findCourse)[1];
+                        n += subject.toLowerCase().find(courses.findCourse)[1];
                     }
                 }
             }
