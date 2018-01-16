@@ -1,14 +1,13 @@
 var classes = [];
 
 function compute() {
-    alert(courses.credits("LING 367"));
     $(".output").empty();
-    for (var i in majors)
+    for (let i in majors)
         majors[i].applicableCredits = 0; // reinitializes applicable credit count
 
     storeClasses();
 
-    for (var i in majors) {
+    for (let i in majors) {
         majors[i].reqs(classes);
     }
 
@@ -16,12 +15,11 @@ function compute() {
 }
 
 function storeClasses() {
-    if ($("#classes").is(':empty'))
-        classes = $("#classes").val().split('\n');
+    classes = $("#classes").val().split('\n');
 }
 
 function incl(options) {
-    if (classes.length == 0)
+    if (classes.length === 0)
         return 0;
 
     return (inclLoop(options));
@@ -29,11 +27,9 @@ function incl(options) {
 
 function inclLoop(options){
     if (Array.isArray(options)) {
-        for (var i in options) {
+        for (let i in options) {
             if (classes.includes(options[i])) {
-
                 classes.splice(classes.indexOf(options[i]), 1);
-
                 return courses.credits(options[i]);
             }
         }
@@ -49,12 +45,11 @@ function inclLoop(options){
 }
 
 function parseDB(db, prefix) {
-    var n = 0;
-    for (var i in db.nums) {
-        //alert(prefix + " " + db.nums[i]);
-        if (classes.includes(prefix + " " + db.nums[i])) {
-            classes.splice(classes.indexOf(prefix + " " + prefix), 1);
-            n += 4;
+    let n = 0;
+    for (let i in db) {
+        if (classes.includes(prefix.toUpperCase() + " " + db[i][0])) {
+            classes.splice(classes.indexOf(prefix + " " + db[i][0]), 1);
+            n += db[i][1];
         }
     }
     return n;

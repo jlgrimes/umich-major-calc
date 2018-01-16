@@ -1,4 +1,4 @@
-var courses = {
+let courses = {
     subject: function(course) {
         return (course.substr(0, course.indexOf(' ')));
     },
@@ -6,7 +6,7 @@ var courses = {
         return (parseInt(course.substr(course.indexOf(' ') + 1, course.length - 1)));
     },
     findCourse: function (element) {
-        return (element[0] == subject);
+        return (element[0] === subject);
     },
     includesCourseInReq: function(course, req) {
         return (courses.number(course) in courses[courses.subject(course).toLowerCase()][req]);
@@ -18,12 +18,16 @@ var courses = {
         return (courses.subject(course).toLowerCase() in courses);
     },
     credits: function(course) {
-        if (courses.includesSubject(course))
-            for (var req in courses[courses.subject(course).toLowerCase()]) {
-                if (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] == courses.number(course)) != null) {
-                    return (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] == courses.number(course))[1]);
+        if (courses.includesSubject(course)) {
+            for (let req in courses[courses.subject(course).toLowerCase()]) {
+                if (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] === courses.number(course)) != null) {
+                    return (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] === courses.number(course))[1]);
                 }
             }
+        }
+
+        //Materialize.toast(course + " not found!", 4000);
+        //return 4;
     },
     aas: {
         humanities : [[104, 3], [111, 4], [208, 4], [245, 4], [338, 3], [384, 3], [385, 3]]
@@ -71,6 +75,7 @@ var courses = {
         flex: [[230, 4], [330, 4], [341, 4], [342, 4], [343, 4], [344, 4], [360, 4], [405, 3], [412, 4], [431, 3], [444, 3], [460, 4], [466, 3], [470, 3], [472, 4], [485, 1], [487, 5], [488, 2], [489, 3], [490, 1 /*to 16*/], [496, 1], [497, 1]] // last two are to 16 as well
     },
     chem: {
+        core: [[125, 2], [126, 2], [130, 4]],
         flex: [[210, 3], [211, 4], [215, 3], [216, 2], [230, 3], [241, 2], [242, 2], [260, 3], [302, 3], [303, 3], [351, 4], [352, 2], [353, 3], [398, 1/*to 4*/], [399, 1/*to 4*/], [417, 3], [420, 3], [436, 3], [447, 3], [451, 4], [452, 4], [463, 3], [483, 3], [498, 1], [499, 1]]
     },
     clarch: {
@@ -174,6 +179,7 @@ var courses = {
         flex: [[442, 3]]
     },
     math: {
+        core: [[120, 4], [121, 4], [217, 4]],
         flex: [[215, 4], [216, 4], [316, 3], [351, 3], [354, 3], [371, 3], [396, 4], [404, 3], [412, 3], [423, 3], [424, 3], [425, 3], [433, 3],
                [450, 4], [451, 3], [452, 3], [454, 3], [462, 3], [465, 3], [471, 3], [472, 3], [475, 3], [487, 3], [498, 3], [494, 3], [498, 3]]
     },
@@ -214,6 +220,7 @@ var courses = {
         flex: [[414]]
     },
     physics: {
+        core: [[140, 3], [141, 2], [240, 3], [241, 3]],
         flex: [[340, 3], [351, 3], [360, 3], [390, 3], [391, 2], [401, 4], [405, 4], [406, 4], [411, 3], [415, 1 /*to 6*/], [417, 3], [441, 3], [442, 3], [453, 4], [457, 3],
                [460, 3], [463, 3]] // 496-499
     },
@@ -248,6 +255,7 @@ var courses = {
         humanities: [[295, 3], [332, 3], [335, 3], [372, 3], [373, 3], [381, 3]]
     },
     stats: {
+        core: [[250, 4]],
         flex: [[401, 4], [406, 3], [413, 4], [415, 4], [425, 3], [426, 3], [430, 3], [531, 3]]
     },
     theory: {
@@ -264,7 +272,7 @@ var courses = {
     }
 };
 
-var c = {
+let c = {
     engrCore: {
         name: "Engineering Core",
         max: 8,
@@ -276,22 +284,22 @@ var c = {
         name: "Engineering Science",
         max: 15,
         func: function() {
-            return (incl(["CHEM 130", "CHEM 210"], 3)
-            + incl(["CHEM 125", "CHEM 216", "CHEM 211"], 2)
-            + incl("PHYSICS 140", 3)
-            + incl("PHYSICS 141", 2)
-            + incl("PHYSICS 240", 3)
-            + incl("PHYSICS 241", 2));
+            return (incl(["CHEM 130", "CHEM 210"])
+            + incl(["CHEM 125", "CHEM 216", "CHEM 211"])
+            + incl("PHYSICS 140")
+            + incl("PHYSICS 141")
+            + incl("PHYSICS 240")
+            + incl("PHYSICS 241"));
         }
     },
     engrMath: {
         name: "Engineering Math",
         max: 12,
         func: function() {
-            return (incl(["MATH 115", "MATH 120"], 4)
-            + incl(["MATH 116", "MATH 121"], 4)
-            + incl(["MATH 214", "MATH 217", "MATH 417"], 4)
-            + incl(["MATH 215", "MATH 216"], 4));
+            return (incl(["MATH 115", "MATH 120"])
+            + incl(["MATH 116", "MATH 121"])
+            + incl(["MATH 214", "MATH 217", "MATH 417"])
+            + incl(["MATH 215", "MATH 216"]));
         }
     },
     engrStats: {
@@ -305,7 +313,7 @@ var c = {
         name: "Electives",
         max: 15,
         func: function() {
-            var n = 0;
+            let n = 0;
             while (classes.length > 0){
                 classes.splice(0, 1);
                 n += 4; // need to fix with API
@@ -318,77 +326,63 @@ var c = {
         name: "Intellectual Breadth",
         max: 12,
         func: function () {
-            var n = 0;
-            for (var i = 0; i < classes.length; i++) { // sorts through remaining classes
-                //alert(classes[i] + " in " + classes);
-
-                var subject = classes[i].substr(0, classes[i].indexOf(' '));
-                var number = parseInt(classes[i].substr(classes[i].indexOf(' ') + 1, classes[i].length - 1));
-                if ("humanities" in subject.toLowerCase()) {
-                    if (subject.toLowerCase().find(courses.findCourse)[0] == number) {
+            let n = 0;
+            for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
+                if (courses.includesReqInSubject("humanities", classes[i]))
+                    if (courses.includesCourseInReq(classes[i], "humanities")){
                         classes.splice(i, 1);
                         i--;
-                        n += subject.toLowerCase().find(courses.findCourse)[1];
+                        n += courses.credits(classes[i]);
                     }
-                }
             }
 
-            if (n <= c.CSEFlexTechs.max)
+            if (n <= c.intellectualBreadth.max)
                 return n;
 
-            return c.CSEFlexTechs.max;
+            return c.intellectualBreadth.max;
         }
     },
     CSCore: {
         name: "CS Core Requirements",
         max: 25,
         func: function() {
-            return (incl(["EECS 203", "MATH 465", "MATH 565"], 4)
-            + incl("TCHNCLCM 300", 1) + parseDB(CS, "EECS"));
+            return (incl(["EECS 203", "MATH 465", "MATH 565"])
+            + incl("TCHNCLCM 300") + parseDB(courses.eecs.cs, "EECS"));
         }
     },
     CSMDE: {
         name: "CS MDE",
         max: 4,
         func: function () {
-            return(parseDB(CSMDE, "EECS"));
+            return(parseDB(courses.eecs.csmde, "EECS"));
         }
     },
     EECSMDE: {
         name: "EECS MDE",
         max: 4,
         func: function() {
-            return (incl("EECS 496", 2) + incl("TCHNCLCM 497", 2));
+            return (incl("EECS 496") + incl("TCHNCLCM 497"));
         }
     },
     ULCS: {
         name: "Upper Level CS",
         max: 16,
         func: function () {
-            return(parseDB(ULCS, "EECS"))
+            return(parseDB(courses.eecs.ulcs, "EECS"))
         }
     },
     CSEFlexTechs: {
         name: "CSE Flex Techs",
         max: 12,
         func: function () {
-            var n = 0;
-            for (var i = 0; i < classes.length; i++) { // sorts through remaining classes
-                //alert(classes[i] + " in " + classes);
-
-                if (courses.includesReqInSubject('flex', classes[i])) {
-                    if (courses.includesCourseInReq(classes[i], 'flex')) {
+            let n = 0;
+            for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
+                if (courses.includesReqInSubject("flex", classes[i]))
+                    if (courses.includesCourseInReq(classes[i], "flex")){
                         classes.splice(i, 1);
                         i--;
-                        n += 4; // need to fix with API
+                        n += courses.credits(classes[i]);
                     }
-                    if ("other" in flexTechs[subject.toLowerCase()])
-                        if (flexTechs[subject.toLowerCase()].other(number)) {
-                            classes.splice(i, 1);
-                            i--;
-                            n += 4; // need to fix with API
-                        }
-                }
             }
 
             if (n <= c.CSEFlexTechs.max)
