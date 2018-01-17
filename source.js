@@ -2,12 +2,12 @@ var classes = [];
 
 function compute() {
     $(".output").empty();
-    for (var i in majors)
+    for (let i in majors)
         majors[i].applicableCredits = 0; // reinitializes applicable credit count
 
     storeClasses();
 
-    for (var i in majors) {
+    for (let i in majors) {
         majors[i].reqs(classes);
     }
 
@@ -15,63 +15,41 @@ function compute() {
 }
 
 function storeClasses() {
-    if ($("#classes").is(':empty'))
-        classes = $("#classes").val().split('\n');
+    classes = $("#classes").val().split('\n');
 }
 
-function inclExceptions(name) { // if the class can roll over to other requirements
-    var bool = false;
-    var CSexceptions = ["CHEM 210", "CHEM 211", "MATH 215", "MATH 216"];
-
-    for (var i in CSexceptions) // ONLY WORKS FOR CS RIGHT NOW
-        if (name == CSexceptions[i])
-            bool = true;
-
-    return bool;
-}
-
-function incl(options, credits) {
-    if (classes.length == 0)
+function incl(options) {
+    if (classes.length === 0)
         return 0;
 
-    if(inclLoop(options))
-        return credits;
-    return 0;
+    return (inclLoop(options));
 }
 
 function inclLoop(options){
     if (Array.isArray(options)) {
-        for (var i in options)
+        for (let i in options) {
             if (classes.includes(options[i])) {
-
-                if (inclExceptions(options[i]));
-                else
-                    classes.splice(classes.indexOf(options[i]), 1);
-
-                return true;
+                classes.splice(classes.indexOf(options[i]), 1);
+                return courses.credits(options[i]);
             }
+        }
     }
     else {
         if (classes.includes(options)) {
-
-            if (inclExceptions(options));
-            else
-                classes.splice(classes.indexOf(options), 1);
-
-            return true;
+            classes.splice(classes.indexOf(options), 1);
+            return courses.credits(options);
         }
     }
 
-    return false;
+    return 0;
 }
 
 function parseDB(db, prefix) {
-    var n = 0;
-    for (var i in db.nums) {
-        //alert(prefix + " " + db.nums[i]);
-        if (classes.includes(prefix + " " + db.nums[i])) {
-            classes.splice(classes.indexOf(prefix + " " + prefix), 1);
-            n += 4;
+    let n = 0;
+    for (let i in db) {
+        if (classes.includes(prefix.toUpperCase() + " " + db[i][0])) {
+            classes.splice(classes.indexOf(prefix + " " + db[i][0]), 1);
+            n += db[i][1];
         }
     }
     return n;
@@ -79,8 +57,4 @@ function parseDB(db, prefix) {
 
 function cCap(obj) {
     return Math.min(obj.func(), obj.max);
-}
-
-function findCourse(arr, subject) {
-    return (arr[0] == subject);
 }

@@ -1,249 +1,305 @@
-var ULCS = {nums: [373, 381, 388, 427, 442, 445, 467, 470, 475, 477, 478,
-    482, 483, 484, 485, 486, 487, 489, 490, 492, 493], prefix: "EECS"};
-
-var CS = {nums: [280, 281, 370, 376, 496], prefix: "EECS"};
-var CSMDE = {nums: [441, 467, 470, 481, 494, 497]};
-
-var humanities = {
-    aas: [[104, 3], [111, 4], [208, 4], [245, 4], [338, 3], [384, 3], [385, 3]],
-    ala: [[260, 3]],
-    amcult: [[103, 3], [201, 4], [204, 3], [230, 3], [235, 4], [240, 4], [243, 3], [311, 3], [324, 3], [325, 3], [346, 3], [373, 4], [376, 3], [381, 3]],
-    anthrarc: [[381, 4]],
-    arabam: [[235, 4], [311, 3]],
-    arch: [[215, 4]],
-    asian: [[200, 3], [252, 3], [258, 4], [259, 4], [280, 3], [305, 3], [312, 3], [325, 4], [327, 3], [328, 3], [335, 3], [353, 3], [362, 3], [363, 3], [367, 3], [374, 3]],
-    asianpam: [[204, 3], [311, 3], [324, 3], [325, 3]],
-    clarch: [[104, 3], [221, 4], [350, 3]],
-    clciv: [[102, 4], [120, 3], [125, 1], [253, 3], [369, 3], [375, 4], [385, 4]],
-    comm: [[271, 4]],
-    complit: [[100, 3], [140, 3], [241, 3], [322, 3], [372, 3], [376, 3]],
-    csp: [[105, 4]],
-    czech: [[315, 3]],
-    dutch: [[351, 3]],
-    english: [[140, 3], [203, 3], [221, 3], [225, 4], [230, 3], [232, 3], [235, 3], [240, 3], [258, 3], [267, 3], [270, 3], [280, 3], [285, 3], [290, 3], [292, 2], [293, 2],
-              [298, 3], [303, 4], [308, 3], [313, 4], [315, 3], [317, 3], [318, 3], [319, 3], [320, 3], [332, 3], [340, 3], [349, 3], [351, 4], [362, 3], [364, 3], [367, 4],
-              [373, 3], [374, 3], [375, 3], [379, 3], [381, 3], [384, 3], [385, 3], [388, 3]],
-    environ: [[244, 3], [304, 3], [337, 3], [376, 3], [377, 3]],
-    french: [[240, 3], [270, 3], [274, 3], [350, 3], [368, 3]],
-    german: [[303, 3], [304, 1], [322, 4], [346, 3], [388, 3]],
-    greekmod: [[325, 3], [330, 3]],
-    histart: [[194, 3], [200, 4], [208, 4], [215, 4], [216, 4], [221, 4], [230, 3], [253, 3], [272, 4], [305, 3], [342, 3], [345, 3], [357, 3], [370, 3], [382, 4], [393, 3],
-              [394, 3], [395, 2]],
-    history: [[103, 4], [197, 4], [201, 3], [203, 3], [216, 4], [230, 3], [245, 4], [255, 4], [321, 3], [322, 4], [328, 3], [331, 4], [373, 4]],
-    honors: [[231, 4], [251, 3]],
-    insthum: [[311, 3]],
-    islam: [[216, 4], [245, 4], [315, 4]],
-    italian: [[250, 3], [310, 3], [333, 3], [340, 3]],
-    judaic: [[150, 3], [218, 1], [223, 3], [250, 4], [255, 3], [258, 3], [281, 4], [335, 3], [340, 3], [351, 3]],
-    latin: [[301, 3]],
-    latinoam: [[243, 3], [311, 4], [381, 3]],
-    lhsp: [[228, 3]],
-    ling: [[102, 3], [114, 3], [137, 3], [317, 3], [367, 3]],
-    mems: [[314, 3], [333, 3], [345, 3], [367, 4]],
-    musicol: [[140, 2], [240, 2], [346, 3]],
-    neareast: [[216, 4], [236, 4], [279, 3], [280, 4], [281, 4], [291, 3], [295, 3], [315, 4], [335, 3], [338, 4],
-               [391, 3]],
-    phil: [[101, 4], [183, 3], 196[3], [294, 4], [298, 3], [340, 4], [355, 4], [366, 4], [371, 3], [376, 3], [383, 4], [385, 3], [389, 4], [393, 3]],
-    polish: [[326, 3], [331, 4]],
-    rchums: [[236, 4], [251, 3], [272, 4], [281, 4], [312, 3], [314, 3], [334, 3], [337, 3], [341, 3], [344, 3], [356, 3]],
-    religion: [[204, 4], [236, 4], [258, 3], [305, 3], [323, 4], [328, 3], [359, 3]],
-    romlang: [[253, 3]],
-    russian: [[333, 3], [375, 3]],
-    sac: [[190, 3], [236, 4], [250, 4], [315, 3], [335, 3], [340, 3], [346, 3], [353, 3], [376, 3], [381, 3]],
-    slavic: [[150, 3], [281, 4], [290, 4 /*1 or 3?*/], [312, 3]],
-    spanish: [[295, 3], [332, 3], [335, 3], [372, 3], [373, 3], [381, 3]],
-    theory: [[238, 3]],
-    thtremus: [[323, 3]],
-    uc: [[150, 3]],
-    womenstd: [[150, 3], [213, 4 /*or 3*/], [235, 4], [240, 4], [243, 3], [313, 4 /*or 3*/], [315, 3]],
-}
-
-var flexTechs = { // prefixes are name of category
-    // IMPLEMENT DIRECTED STUDY RULE (credits cap at 4)
-    aerosp: {
-        nums: [215, 225, 245],
-        other: function (courseNumber) {
-            return (courseNumber >= 300)
+let courses = {
+    subject: function(course) {
+        return (course.substr(0, course.indexOf(' ')));
+    },
+    number: function(course) {
+        return (parseInt(course.substr(course.indexOf(' ') + 1, course.length - 1)));
+    },
+    findCourse: function (element) {
+        return (element[0] === subject);
+    },
+    includesCourseInReq: function(course, req) {
+        return (courses.number(course) in courses[courses.subject(course).toLowerCase()][req]);
+    },
+    includesReqInSubject: function(req, course) {
+        return (req in courses[courses.subject(course).toLowerCase()]);
+    },
+    includesSubject: function(course) {
+        return (courses.subject(course).toLowerCase() in courses);
+    },
+    credits: function(course) {
+        if (courses.includesSubject(course)) {
+            for (let req in courses[courses.subject(course).toLowerCase()]) {
+                if (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] === courses.number(course)) != null) {
+                    return (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] === courses.number(course))[1]);
+                }
+            }
         }
+
+        //Materialize.toast(course + " not found!", 4000);
+        //return 4;
+    },
+    aas: {
+        humanities : [[104, 3], [111, 4], [208, 4], [245, 4], [338, 3], [384, 3], [385, 3]]
+    },
+    aerosp: {
+        flex: [[215, 4], [225, 4], [245, 4], [305, 4], [315, 4], [325, 4], [335, 4], [347, 3], [348, 3], [384, 3], [390, 2]]
+    },
+    ala: {
+        humanities: [[260, 3]]
     },
     astro: {
-        nums: [404]
+        flex: [[404, 3]]
+    },
+    amcult: {
+        humanities: [[103, 3], [201, 4], [204, 3], [230, 3], [235, 4], [240, 4], [243, 3], [311, 3], [324, 3], [325, 3], [346, 3], [373, 4], [376, 3], [381, 3]]
+    },
+    anthrarc: {
+        humanities: [[381, 4]]
+    },
+    arabam: {
+        humanities: [[235, 4], [311, 3]]
+    },
+    arch: {
+        humanities: [[215, 4]]
+    },
+    asian: {
+        humanities: [[200, 3], [252, 3], [258, 4], [259, 4], [280, 3], [305, 3], [312, 3], [325, 4], [327, 3], [328, 3], [335, 3], [353, 3], [362, 3], [363, 3], [367, 3], [374, 3]]
+    },
+    asianpam: {
+        humanities: [[204, 3], [311, 3], [324, 3], [325, 3]]
     },
     biophys: {
-        nums: [463]
+        flex: [[463, 3]]
     },
     biology: {
-        nums: [305],
-        other: function (courseNumber) {
-            return (courseNumber >= 400);
-        }
+        flex: [[305, 3]] // greater than 400??
     },
     biomede: {
-        nums: [221, 231],
-        other: function (courseNumber) {
-            return (courseNumber >= 400);
-        }
+        flex: [[221, 4], [231, 4]]
     },
-    che: { // Chemical Engineering
-        nums: [230],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+    cee: {
+        flex: [[211, 4], [212, 3], [230, 3], [265, 3], [303, 4], [307, 3], [312, 4], [325, 4], [345, 4], [351, 4], [365, 4], [366, 2], [373, 3], [375, 3]]
+    },
+    che: {
+        flex: [[230, 4], [330, 4], [341, 4], [342, 4], [343, 4], [344, 4], [360, 4], [405, 3], [412, 4], [431, 3], [444, 3], [460, 4], [466, 3], [470, 3], [472, 4], [485, 1], [487, 5], [488, 2], [489, 3], [490, 1 /*to 16*/], [496, 1], [497, 1]] // last two are to 16 as well
     },
     chem: {
-        nums: [210, 211, 215, 216, 230, 241, 242, 260],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+        core: [[125, 2], [126, 2], [130, 4]],
+        flex: [[210, 3], [211, 4], [215, 3], [216, 2], [230, 3], [241, 2], [242, 2], [260, 3], [302, 3], [303, 3], [351, 4], [352, 2], [353, 3], [398, 1/*to 4*/], [399, 1/*to 4*/], [417, 3], [420, 3], [436, 3], [447, 3], [451, 4], [452, 4], [463, 3], [483, 3], [498, 1], [499, 1]]
     },
-    cee: { // Civil and Environmental Engineering
-        nums: [211, 212, 230, 265],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+    clarch: {
+        humanities: [[104, 3], [221, 4], [350, 3]]
+    },
+    clciv: {
+        humanities: [[102, 4], [120, 3], [125, 1], [253, 3], [369, 3], [375, 4], [385, 4]]
     },
     climate: {
-        nums: [],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+        flex: [[300, 3], [320, 3], [321, 3], [323, 4], [350, 3], [380, 3], [381, 1/* to four*/]]
     },
-    space: {
-        nums: [],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+    cmplxsys: {
+        flex: [[270, 3]]
     },
-    cmplxsys: { // Complex Systems
-        nums: [270]
+    comm: {
+        humanities: [[271, 4]]
+    },
+    complit: {
+        humanities: [[100, 3], [140, 3], [241, 3], [322, 3], [372, 3], [376, 3]]
+    },
+    csp: {
+        humanities: [[105, 4]]
+    },
+    czech: {
+        humanities: [[315, 3]]
+    },
+    dutch: {
+        humanities: [[351, 3]]
     },
     econ: {
-        nums: [409, 452]
+        flex: [[409, 4], [452, 4]]
+    },
+    english: {
+        humanities: [[140, 3], [203, 3], [221, 3], [225, 4], [230, 3], [232, 3], [235, 3], [240, 3], [258, 3], [267, 3], [270, 3], [280, 3], [285, 3], [290, 3], [292, 2], [293, 2],
+            [298, 3], [303, 4], [308, 3], [313, 4], [315, 3], [317, 3], [318, 3], [319, 3], [320, 3], [332, 3], [340, 3], [349, 3], [351, 4], [362, 3], [364, 3], [367, 4],
+            [373, 3], [374, 3], [375, 3], [379, 3], [381, 3], [384, 3], [385, 3], [388, 3]]
     },
     eecs: {
-        nums : [270, 285, 382, 441, 473, 481, 494, 497, 527, 543,
-                545, 547, 567, 570, 571, 573, 574, 575, 578, 579,
-                580, 581, 582, 583, 584, 586, 587, 588, 589, 590,
-                591, 592, 594, 595]
+        cs: [[280, 4], [281, 4], [370, 4], [376, 4], [496, 4]],
+        csmde: [[441, 4], [467, 4], [470, 4], [481, 4], [494, 4], [497, 4]],
+        flex: [[270, 4], [285, 2], [382, 4], [441, 4], [473, 4], [481, 4], [494, 4], [497, 4], [527, 3 /*or 4*/], [543, 3], [545, 3], [547, 3], [567, 3], [570, 4], [571, 4], [573, 3], [574, 4], [575, 4],
+               [578, 4], [579, 4], [580, 4], [581, 3], [582, 4], [583, 4], [584, 4], [586, 4], [587, 4], [588, 4], [589, 4], [590, 4], [591, 4], [592, 4], [594, 3], [595, 3]],
+        ulcs: [[373, 4], [381, 4], [388, 4], [427, 4], [442, 4], [445, 4], [467, 4], [470, 4], [475, 4], [477, 4], [478, 4],
+               [482, 4], [483, 4], [484, 4], [485, 4], [486, 4], [487, 4], [489, 4], [490, 4], [492, 4], [493, 4]]
     },
     engr: {
-        nums: [350, 355, 403, 450, 455, 480],
+        core: [[100, 4], [101, 4], [151, 4]],
+        flex: [[350, 3], [355, 1/*1-4*/], [403, 3], [450, 4], [455, 2/*to 5*/], [480, 4]]
     },
-    entr: {
-        nums: [390] // section 013 only
+//entr
+    environ: {
+        humanities: [[244, 3], [304, 3], [337, 3], [376, 3], [377, 3]]
     },
-    ioe: {
-        nums: [202],
-        other: function (courseNumber) {
-            return (courseNumber >= 300 && courseNumber != 373 && courseNumber != 422);
-        }
+    french: {
+        humanities: [[240, 3], [270, 3], [274, 3], [350, 3], [368, 3]]
+    },
+    german: {
+        humanities: [[303, 3], [304, 1], [322, 4], [346, 3], [388, 3]]
+    },
+    greekmod: {
+        humanities: [[325, 3], [330, 3]]
+    },
+    histart: {
+        humanities: [[194, 3], [200, 4], [208, 4], [215, 4], [216, 4], [221, 4], [230, 3], [253, 3], [272, 4], [305, 3], [342, 3], [345, 3], [357, 3], [370, 3], [382, 4], [393, 3],
+            [394, 3], [395, 2]]
+    },
+    history: {
+        humanities: [[103, 4], [197, 4], [201, 3], [203, 3], [216, 4], [230, 3], [245, 4], [255, 4], [321, 3], [322, 4], [328, 3], [331, 4], [373, 4]]
+    },
+    honors: {
+        humanities: [[231, 4], [251, 3]]
+    },
+    insthum: {
+        humanities: [[311, 3]]
+    },
+    ioe: { // didn't add 500 level
+        flex: [[202, 2], [310, 3], [316, 3], [333, 3], [334, 1], [366, 3], [373, 4], [412, 3], [413, 3], [416, 2], [419, 3], [421, 3], [422, 3], [424, 4], [425, 2], [430, 3], [432, 3],
+               [434, 3], [436, 3], [437, 3], [438, 2], [440, 3], [441, 3], [447, 3], [449, 3], [452, 3], [453, 3/*no credit for math 423*/], [460, 3], [461, 3], [463, 3], [465, 3], [466, 3], [474, 4],
+               [481, 4], [490, 2/*max 4*/], [499, 4]]
+    },
+    islam: {
+        humanities: [[216, 4], [245, 4], [315, 4]]
+    },
+    italian: {
+        humanities: [[250, 3], [310, 3], [333, 3], [340, 3]]
+    },
+    judaic: {
+        humanities: [[150, 3], [218, 1], [223, 3], [250, 4], [255, 3], [258, 3], [281, 4], [335, 3], [340, 3], [351, 3]]
+    },
+    latin: {
+        humanities: [[301, 3]]
+    },
+    latinoam: {
+        humanities: [[243, 3], [311, 4], [381, 3]]
+    },
+    lhsp: {
+        humanities: [[228, 3]]
     },
     ling: {
-        nums: [442]
-    },
-    matscie: {
-        nums: [220, 242, 250],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+        humanities: [[102, 3], [114, 3], [137, 3], [317, 3], [367, 3]],
+        flex: [[442, 3]]
     },
     math: {
-        nums: [215, 216], // IF NOT USED FOR CORE
-        other: function (courseNumber) {
-            var bool = true;
-            var exceptions = [310, 327, 333, 385, 389, 399, 417, 419, 422, 429, 431, 485, 486, 489, 497];
-
-            for (var i in exceptions)
-                if (courseNumber == i){
-                    bool = false;
-                    break;
-                }
-
-            return (courseNumber >= 300 && bool);
-        }
+        core: [[120, 4], [121, 4], [217, 4]],
+        flex: [[215, 4], [216, 4], [316, 3], [351, 3], [354, 3], [371, 3], [396, 4], [404, 3], [412, 3], [423, 3], [424, 3], [425, 3], [433, 3],
+               [450, 4], [451, 3], [452, 3], [454, 3], [462, 3], [465, 3], [471, 3], [472, 3], [475, 3], [487, 3], [498, 3], [494, 3], [498, 3]]
+    },
+    matscie: { // non LSA credit
+        flex: [[220, 4], [242, 4], [250, 4], [335, 4], [365, 3], [440, 3], [470, 3], [480, 3], [485, 1/* to 4*/]]
+    },
+    mcdb: {
+        flex: [[306, 3], [310, 3]]
     },
     mecheng: {
-        nums: [211, 235, 240, 250],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+        flex: [[211, 4], [235, 3], [240, 4], [250, 4], [305, 3], [311, 3], [320, 3], [335, 3], [336, 3], [350, 4], [360, 4], [382, 4], [390, 2 /*or three*/],
+               [395, 4], [400, 3], [401, 3], [406, 3], [412, 3], [420, 3], [424, 3], [432, 3], [433, 3], [438, 4], [440, 4], [450, 4], [451, 3],
+               [452, 3], [455, 3 /*or 4*/], [456, 3], [458, 3], [461, 3], [476, 4], [481, 3], [482, 3], [483, 3], [487, 3], [489, 3], [490, 3], [491, 1 /*to three*/], [495, 4]]
     },
-    mcdb: { // Molecular, Cellular, and Developmental Biology
-        nums: [306, 310],
+    mems: {
+        humanities: [[314, 3], [333, 3], [345, 3], [367, 4]]
+    },
+    musicol: {
+        humanities: [[140, 2], [240, 2], [346, 3]]
     },
     navarch: {
-        nums: [260, 270],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+        flex: [[260, 2], [270, 3], [310, 4], [320, 4], [321, 4], [331, 3], [332, 3], [340, 4], [391, 3], [401, 4], [403, 3], [416, 3], [420, 4], [423, 4], [424, 4], [431, 3], [440, 4], [461, 3], [470, 4], [471, 3],
+               [475, 4], [483, 3], [491, 3], [492, 2]] // 499 1-4
+    },
+    neareast: {
+        humanities: [[216, 4], [236, 4], [279, 3], [280, 4], [281, 4], [291, 3], [295, 3], [315, 4], [335, 3], [338, 4],
+            [391, 3]]
     },
     ners: {
-        nums: [250],
-        other: function (courseNumber) {
-            return (courseNumber >= 300);
-        }
+        flex: [[250, 4], [311, 3], [312, 3], [315, 4], [320, 4], [344, 3], [421, 3], [425, 4], [441, 4], [442, 4], [444, 3], [462, 3], [471, 3], [472, 3], [481, 2],
+               [484, 4]] // 490 1-4, 499 1-3
     },
     pat: {
-        nums: [452, 462],
+        flex: [452, 462]
     },
     phil: {
-        nums: [414],
+        humanities: [[101, 4], [183, 3], 196[3], [294, 4], [298, 3], [340, 4], [355, 4], [366, 4], [371, 3], [376, 3], [383, 4], [385, 3], [389, 4], [393, 3]],
+        flex: [[414]]
     },
     physics: {
-        nums: [],
-        other: function (courseNumber) {
-            var bool = true;
-            var exceptions = [333, 334, 365, 420, 481];
-
-            for (var i in exceptions)
-                if (courseNumber == i){
-                    bool = false;
-                    break;
-                }
-
-            return (courseNumber >= 300 && bool);
-        }
+        core: [[140, 3], [141, 2], [240, 3], [241, 3]],
+        flex: [[340, 3], [351, 3], [360, 3], [390, 3], [391, 2], [401, 4], [405, 4], [406, 4], [411, 3], [415, 1 /*to 6*/], [417, 3], [441, 3], [442, 3], [453, 4], [457, 3],
+               [460, 3], [463, 3]] // 496-499
+    },
+    polish: {
+        humanities: [[326, 3], [331, 4]]
+    },
+    rchums: {
+        humanities: [[236, 4], [251, 3], [272, 4], [281, 4], [312, 3], [314, 3], [334, 3], [337, 3], [341, 3], [344, 3], [356, 3]]
+    },
+    religion: {
+        humanities: [[204, 4], [236, 4], [258, 3], [305, 3], [323, 4], [328, 3], [359, 3]]
+    },
+    romlang: {
+        humanities: [[253, 3]]
+    },
+    russian: {
+        humanities: [[333, 3], [375, 3]]
+    },
+    sac: {
+        humanities: [[190, 3], [236, 4], [250, 4], [315, 3], [335, 3], [340, 3], [346, 3], [353, 3], [376, 3], [381, 3]]
     },
     si: {
-        nums: [301, 422]
+        flex: [[422, 3]]
+    },
+    slavic: {
+        humanities: [[150, 3], [281, 4], [290, 4 /*1 or 3?*/], [312, 3]]
+    },
+    space: {
+        flex: [[300, 3], [320, 3], [321, 3], [323, 4], [350, 3], [370, 4], [380, 3], [381, 1/* to four*/]]
+    },
+    spanish: {
+        humanities: [[295, 3], [332, 3], [335, 3], [372, 3], [373, 3], [381, 3]]
     },
     stats: {
-        nums: [401, 403, 406, 413, 415, 425, 426, 430, 470, 531]
+        core: [[250, 4]],
+        flex: [[401, 4], [406, 3], [413, 4], [415, 4], [425, 3], [426, 3], [430, 3], [531, 3]]
     },
-    to: { // Technology and Operations
-        nums: [414, 605]
+    theory: {
+        humanities: [[238, 3]]
+    },
+    thtremus: {
+        humanities: [[323, 3]]
+    },
+    uc: {
+        humanities: [[150, 3]]
+    },
+    womenstd: {
+        humanities: [[150, 3], [213, 4 /*or 3*/], [235, 4], [240, 4], [243, 3], [313, 4 /*or 3*/], [315, 3]]
     }
-
 };
 
-var c = {
+let c = {
     engrCore: {
         name: "Engineering Core",
         max: 8,
         func: function() {
-            return (incl("ENGR 100", 4) + incl(["ENGR 101", "ENGR 151"], 4));
+            return (incl("ENGR 100") + incl(["ENGR 101", "ENGR 151"]));
         }
     },
     engrScience: {
         name: "Engineering Science",
         max: 15,
         func: function() {
-            return (incl(["CHEM 130", "CHEM 210"], 3)
-            + incl(["CHEM 125", "CHEM 216", "CHEM 211"], 2)
-            + incl("PHYSICS 140", 3)
-            + incl("PHYSICS 141", 2)
-            + incl("PHYSICS 240", 3)
-            + incl("PHYSICS 241", 2));
+            return (incl(["CHEM 130", "CHEM 210"])
+            + incl(["CHEM 125", "CHEM 216", "CHEM 211"])
+            + incl("PHYSICS 140")
+            + incl("PHYSICS 141")
+            + incl("PHYSICS 240")
+            + incl("PHYSICS 241"));
         }
     },
     engrMath: {
         name: "Engineering Math",
         max: 12,
         func: function() {
-            return (incl(["MATH 115", "MATH 120"], 4)
-            + incl(["MATH 116", "MATH 121"], 4)
-            + incl(["MATH 214", "MATH 217", "MATH 417"], 4)
-            + incl(["MATH 215", "MATH 216"], 4));
+            return (incl(["MATH 115", "MATH 120"])
+            + incl(["MATH 116", "MATH 121"])
+            + incl(["MATH 214", "MATH 217", "MATH 417"])
+            + incl(["MATH 215", "MATH 216"]));
         }
     },
     engrStats: {
@@ -257,7 +313,7 @@ var c = {
         name: "Electives",
         max: 15,
         func: function() {
-            var n = 0;
+            let n = 0;
             while (classes.length > 0){
                 classes.splice(0, 1);
                 n += 4; // need to fix with API
@@ -270,79 +326,63 @@ var c = {
         name: "Intellectual Breadth",
         max: 12,
         func: function () {
-            var n = 0;
-            for (var i = 0; i < classes.length; i++) { // sorts through remaining classes
-                //alert(classes[i] + " in " + classes);
-
-                var subject = classes[i].substr(0, classes[i].indexOf(' '));
-                var number = parseInt(classes[i].substr(classes[i].indexOf(' ') + 1, classes[i].length - 1));
-                if (subject.toLowerCase() in humanities) {
-                    if (subject.toLowerCase().find(findCourse)[0] == number) {
+            let n = 0;
+            for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
+                if (courses.includesReqInSubject("humanities", classes[i]))
+                    if (courses.includesCourseInReq(classes[i], "humanities")){
                         classes.splice(i, 1);
                         i--;
-                        n += subject.toLowerCase().find(findCourse)[1];
+                        n += courses.credits(classes[i]);
                     }
-                }
             }
 
-            if (n <= c.CSEFlexTechs.max)
+            if (n <= c.intellectualBreadth.max)
                 return n;
 
-            return c.CSEFlexTechs.max;
+            return c.intellectualBreadth.max;
         }
     },
     CSCore: {
         name: "CS Core Requirements",
         max: 25,
         func: function() {
-            return (incl(["EECS 203", "MATH 465", "MATH 565"], 4)
-            + incl("TCHNCLCM 300", 1) + parseDB(CS, "EECS"));
+            return (incl(["EECS 203", "MATH 465", "MATH 565"])
+            + incl("TCHNCLCM 300") + parseDB(courses.eecs.cs, "EECS"));
         }
     },
     CSMDE: {
         name: "CS MDE",
         max: 4,
         func: function () {
-            return(parseDB(CSMDE, "EECS"));
+            return(parseDB(courses.eecs.csmde, "EECS"));
         }
     },
     EECSMDE: {
         name: "EECS MDE",
         max: 4,
         func: function() {
-            return (incl("EECS 496", 2) + incl("TCHNCLCM 497", 2));
+            return (incl("EECS 496") + incl("TCHNCLCM 497"));
         }
     },
     ULCS: {
         name: "Upper Level CS",
         max: 16,
         func: function () {
-            return(parseDB(ULCS, "EECS"))
+            return(parseDB(courses.eecs.ulcs, "EECS"))
         }
     },
     CSEFlexTechs: {
         name: "CSE Flex Techs",
         max: 12,
         func: function () {
-            var n = 0;
-            for (var i = 0; i < classes.length; i++) { // sorts through remaining classes
-                //alert(classes[i] + " in " + classes);
-
-                var subject = classes[i].substr(0, classes[i].indexOf(' '));
-                var number = parseInt(classes[i].substr(classes[i].indexOf(' ') + 1, classes[i].length - 1));
-                if (subject.toLowerCase() in flexTechs) {
-                    if (flexTechs[subject.toLowerCase()].nums.includes(number)) {
+            let n = 0;
+            for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
+                if (courses.includesReqInSubject("flex", classes[i]))
+                    if (courses.includesCourseInReq(classes[i], "flex")){
                         classes.splice(i, 1);
                         i--;
-                        n += 4; // need to fix with API
+                        n += courses.credits(classes[i]);
                     }
-                    if ("other" in flexTechs[subject.toLowerCase()])
-                        if (flexTechs[subject.toLowerCase()].other(number)) {
-                            classes.splice(i, 1);
-                            i--;
-                            n += 4; // need to fix with API
-                        }
-                }
             }
 
             if (n <= c.CSEFlexTechs.max)
