@@ -8,7 +8,7 @@ function compute() {
     storeClasses();
 
     for (let i in majors) {
-        majors[i].reqs(classes);
+        majors[i].program(classes);
     }
 
     $(".output").append("<div>Total CS Credits: " + majors.CS.applicableCredits + "<div>");
@@ -30,14 +30,14 @@ function inclLoop(options){
         for (let i in options) {
             if (classes.includes(options[i])) {
                 classes.splice(classes.indexOf(options[i]), 1);
-                return courses.credits(options[i]);
+                return crs.credits(options[i]);
             }
         }
     }
     else {
         if (classes.includes(options)) {
             classes.splice(classes.indexOf(options), 1);
-            return courses.credits(options);
+            return crs.credits(options);
         }
     }
 

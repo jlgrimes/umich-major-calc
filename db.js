@@ -1,27 +1,47 @@
-let courses = {
+let majors = {
+    CS: {
+        program: function(){
+            reqs.elective.max = 15;
+            let reqC = [reqs.engrCore, reqs.engrScience, reqs.intellectualBreadth, reqs.engrMath, reqs.engrStats, reqs.CSCore, reqs.CSMDE, reqs.EECSMDE, reqs.CSEFlexTechs, reqs.ULCS, reqs.elective];
+            for (let i in reqC) {
+                let reqc = cCap(reqC[i]);
+                $(".output").append("<p>" + reqC[i].name + ": " + reqc + " out of " + reqC[i].max + "</p>");
+                majors.CS.applicableCredits += reqc; // adds total course count with the cap
+                //alert(reqC[i].name + ": " + classes);
+            }
+        },
+
+        applicableCredits: 0
+    },
+
+    CE: {
+        program: function() {
+            let reqC = [reqs.engrCore, reqs.engrScience. reqs.engrMath, ]
+        }
+    }
+};
+
+let crs = {
     subject: function(course) {
         return (course.substr(0, course.indexOf(' ')));
     },
     number: function(course) {
         return (parseInt(course.substr(course.indexOf(' ') + 1, course.length - 1)));
     },
-    findCourse: function (element) {
-        return (element[0] === subject);
-    },
     includesCourseInReq: function(course, req) {
-        return (courses.number(course) in courses[courses.subject(course).toLowerCase()][req]);
+        return (crs.number(course) in crs[crs.subject(course).toLowerCase()][req]);
     },
     includesReqInSubject: function(req, course) {
-        return (req in courses[courses.subject(course).toLowerCase()]);
+        return (req in crs[crs.subject(course).toLowerCase()]);
     },
     includesSubject: function(course) {
-        return (courses.subject(course).toLowerCase() in courses);
+        return (crs.subject(course).toLowerCase() in crs);
     },
     credits: function(course) {
-        if (courses.includesSubject(course)) {
-            for (let req in courses[courses.subject(course).toLowerCase()]) {
-                if (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] === courses.number(course)) != null) {
-                    return (courses[courses.subject(course).toLowerCase()][req].find(o => o[0] === courses.number(course))[1]);
+        if (crs.includesSubject(course)) {
+            for (let req in crs[crs.subject(course).toLowerCase()]) {
+                if (crs[crs.subject(course).toLowerCase()][req].find(o => o[0] === crs.number(course)) != null) {
+                    return (crs[crs.subject(course).toLowerCase()][req].find(o => o[0] === crs.number(course))[1]);
                 }
             }
         }
@@ -272,7 +292,7 @@ let courses = {
     }
 };
 
-let c = {
+let reqs = {
     engrCore: {
         name: "Engineering Core",
         max: 8,
@@ -319,7 +339,7 @@ let c = {
                 n += 4; // need to fix with API
             }
 
-            return (Math.min(n, c.elective.max));
+            return (Math.min(n, reqs.elective.max));
         }
     },
     intellectualBreadth: {
@@ -328,18 +348,18 @@ let c = {
         func: function () {
             let n = 0;
             for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
-                if (courses.includesReqInSubject("humanities", classes[i]))
-                    if (courses.includesCourseInReq(classes[i], "humanities")){
+                if (crs.includesReqInSubject("humanities", classes[i]))
+                    if (crs.includesCourseInReq(classes[i], "humanities")){
                         classes.splice(i, 1);
                         i--;
-                        n += courses.credits(classes[i]);
+                        n += crs.credits(classes[i]);
                     }
             }
 
-            if (n <= c.intellectualBreadth.max)
+            if (n <= reqs.intellectualBreadth.max)
                 return n;
 
-            return c.intellectualBreadth.max;
+            return reqs.intellectualBreadth.max;
         }
     },
     CSCore: {
@@ -347,14 +367,14 @@ let c = {
         max: 25,
         func: function() {
             return (incl(["EECS 203", "MATH 465", "MATH 565"])
-            + incl("TCHNCLCM 300") + parseDB(courses.eecs.cs, "EECS"));
+            + incl("TCHNCLCM 300") + parseDB(crs.eecs.cs, "EECS"));
         }
     },
     CSMDE: {
         name: "CS MDE",
         max: 4,
         func: function () {
-            return(parseDB(courses.eecs.csmde, "EECS"));
+            return(parseDB(crs.eecs.csmde, "EECS"));
         }
     },
     EECSMDE: {
@@ -368,7 +388,7 @@ let c = {
         name: "Upper Level CS",
         max: 16,
         func: function () {
-            return(parseDB(courses.eecs.ulcs, "EECS"))
+            return(parseDB(crs.eecs.ulcs, "EECS"))
         }
     },
     CSEFlexTechs: {
@@ -377,18 +397,21 @@ let c = {
         func: function () {
             let n = 0;
             for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
-                if (courses.includesReqInSubject("flex", classes[i]))
-                    if (courses.includesCourseInReq(classes[i], "flex")){
+                if (crs.includesReqInSubject("flex", classes[i])) {
+                    alert (crs.number(classes[i]) in crs[crs.subject(classes[i]).toLowerCase()]["flex"]);
+                    alert(crs.includesCourseInReq("MATH 412", "flex"));
+                    if (crs.includesCourseInReq(classes[i], "flex")) {
                         classes.splice(i, 1);
                         i--;
-                        n += courses.credits(classes[i]);
+                        n += crs.credits(classes[i]);
                     }
+                }
             }
 
-            if (n <= c.CSEFlexTechs.max)
+            if (n <= reqs.CSEFlexTechs.max)
                 return n;
 
-            return c.CSEFlexTechs.max;
+            return reqs.CSEFlexTechs.max;
         }
     }
 };
