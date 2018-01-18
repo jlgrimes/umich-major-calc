@@ -1,23 +1,34 @@
+let classes = [];
+
 let majors = {
     CS: {
+        name: "Computer Science Engineering",
+        applicableCredits: 0,
+        requiredCredits: 128,
         program: function(){
             reqs.elective.max = 15;
-            let reqC = [reqs.engrCore, reqs.engrScience, reqs.intellectualBreadth, reqs.engrMath, reqs.engrStats, reqs.CSCore, reqs.CSMDE, reqs.EECSMDE, reqs.CSEFlexTechs, reqs.ULCS, reqs.elective];
-            for (let i in reqC) {
-                let reqc = cCap(reqC[i]);
-                $(".output").append("<p>" + reqC[i].name + ": " + reqc + " out of " + reqC[i].max + "</p>");
-                majors.CS.applicableCredits += reqc; // adds total course count with the cap
-                //alert(reqC[i].name + ": " + classes);
-            }
+            let creditDist = [reqs.engrCore, reqs.engrScience, reqs.intellectualBreadth, reqs.engrMath, reqs.engrStats, reqs.CSCore, reqs.CSMDE, reqs.EECSMDE, reqs.CSEFlexTechs, reqs.ULCS, reqs.elective];
+            majors.print(creditDist, majors.CS);
         },
-
-        applicableCredits: 0
     },
 
     CE: {
+        name: "Computer Engineering",
+        applicableCredits: 0,
+        requiredCredits: 128,
         program: function() {
-            let reqC = [reqs.engrCore, reqs.engrScience. reqs.engrMath, ]
+            let reqC = [reqs.engrCore, reqs.engrScience, reqs.engrMath, reqs.intellectualBreadth]
         }
+    },
+    print: function(creditDist, major) {
+        $(".output").append("<p>" + major.name + "</p>");
+        for (let i in creditDist) {
+            let c = cCap(creditDist[i]);
+            $(".output").append("<p>" + creditDist[i].name + ": " + c + " out of " + creditDist[i].max + "</p>");
+            major.applicableCredits += c; // adds total course count with the cap
+        }
+
+        $(".output").append("<div>Total: " + major.applicableCredits + " out of " + major.requiredCredits + "<div>");
     }
 };
 
@@ -28,11 +39,11 @@ let crs = {
     number: function(course) {
         return (parseInt(course.substr(course.indexOf(' ') + 1, course.length - 1)));
     },
-    includesCourseInReq: function(course, req) {
-        return (crs.number(course) in crs[crs.subject(course).toLowerCase()][req]);
-    },
     includesReqInSubject: function(req, course) {
         return (req in crs[crs.subject(course).toLowerCase()]);
+    },
+    includesCourseInReq: function(course, req) {
+        return (crs[crs.subject(course).toLowerCase()][req].find(o => o[0] === crs.number(course)) != null);
     },
     includesSubject: function(course) {
         return (crs.subject(course).toLowerCase() in crs);
@@ -48,6 +59,13 @@ let crs = {
 
         //Materialize.toast(course + " not found!", 4000);
         //return 4;
+    },
+    totalCredits: function(reqObj) {
+        let n = 0;
+        for (let i in reqObj)
+            n += reqObj[i][1];
+
+        return n;
     },
     aas: {
         humanities : [[104, 3], [111, 4], [208, 4], [245, 4], [338, 3], [384, 3], [385, 3]]
@@ -134,10 +152,13 @@ let crs = {
             [373, 3], [374, 3], [375, 3], [379, 3], [381, 3], [384, 3], [385, 3], [388, 3]]
     },
     eecs: {
+        ce: [[203, 4], [215, 4], [216, 4], [270, 4], [280, 4], [370, 4]],
         cs: [[280, 4], [281, 4], [370, 4], [376, 4], [496, 4]],
         csmde: [[441, 4], [467, 4], [470, 4], [481, 4], [494, 4], [497, 4]],
         flex: [[270, 4], [285, 2], [382, 4], [441, 4], [473, 4], [481, 4], [494, 4], [497, 4], [527, 3 /*or 4*/], [543, 3], [545, 3], [547, 3], [567, 3], [570, 4], [571, 4], [573, 3], [574, 4], [575, 4],
                [578, 4], [579, 4], [580, 4], [581, 3], [582, 4], [583, 4], [584, 4], [586, 4], [587, 4], [588, 4], [589, 4], [590, 4], [591, 4], [592, 4], [594, 3], [595, 3]],
+        other: [[203, 4]],
+        ulce: [[427, 4], [442, 4], [452, 4], [461, 4], [467, 4], [470, 4], [473, 4], [478, 4], [482, 4], [483, 4], [489, 4], [527, 4], [570, 4], [573, 4], [578, 4], [582, 4], [583, 4], [589, 4], [627, 4]],
         ulcs: [[373, 4], [381, 4], [388, 4], [427, 4], [442, 4], [445, 4], [467, 4], [470, 4], [475, 4], [477, 4], [478, 4],
                [482, 4], [483, 4], [484, 4], [485, 4], [486, 4], [487, 4], [489, 4], [490, 4], [492, 4], [493, 4]]
     },
@@ -293,11 +314,85 @@ let crs = {
 };
 
 let reqs = {
+    CECore: {
+        name: "CE Core Requirements",
+        max: 25,
+        func: function() {
+            return (incl(["EECS 203", "MATH 465", "MATH 565"])
+                + incl("TCHNCLCM 300") + parseDB(crs.eecs.ce, "EECS"));
+        }
+    },
+    CSCore: {
+        name: "CS Core Requirements",
+        max: crs.totalCredits(crs.eecs.cs) + 3 + 2,
+        func: function() {
+            return (incl(["EECS 203", "MATH 465", "MATH 565"])
+                + incl("TCHNCLCM 300") + parseDB(crs.eecs.cs, "EECS"));
+        }
+    },
+    CSMDE: {
+        name: "CS MDE",
+        max: 4,
+        func: function () {
+            return(parseDB(crs.eecs.csmde, "EECS"));
+        }
+    },
+    CSEFlexTechs: {
+        name: "CSE Flex Techs",
+        max: 12,
+        func: function () {
+            let n = 0;
+            for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
+                if (crs.includesReqInSubject("flex", classes[i])) {
+                    if (crs.includesCourseInReq(classes[i], "flex")) {
+                        n += crs.credits(classes[i]);
+                        classes.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+
+            if (n <= reqs.CSEFlexTechs.max)
+                return n;
+
+            return reqs.CSEFlexTechs.max;
+        }
+    },
+    EECSMDE: {
+        name: "EECS MDE",
+        max: 4,
+        func: function() {
+            return (incl("EECS 496") + incl("TCHNCLCM 497"));
+        }
+    },
+    elective: {
+        name: "Electives",
+        max: 15,
+        func: function() {
+            let n = 0;
+            while (classes.length > 0){
+                classes.splice(0, 1);
+                n += 4; // need to fix with API
+            }
+
+            return (Math.min(n, reqs.elective.max));
+        }
+    },
     engrCore: {
         name: "Engineering Core",
         max: 8,
         func: function() {
             return (incl("ENGR 100") + incl(["ENGR 101", "ENGR 151"]));
+        }
+    },
+    engrMath: {
+        name: "Engineering Math",
+        max: 12,
+        func: function() {
+            return (incl(["MATH 115", "MATH 120"])
+                + incl(["MATH 116", "MATH 121"])
+                + incl(["MATH 214", "MATH 217", "MATH 417"])
+                + incl(["MATH 215", "MATH 216"]));
         }
     },
     engrScience: {
@@ -312,34 +407,11 @@ let reqs = {
             + incl("PHYSICS 241"));
         }
     },
-    engrMath: {
-        name: "Engineering Math",
-        max: 12,
-        func: function() {
-            return (incl(["MATH 115", "MATH 120"])
-            + incl(["MATH 116", "MATH 121"])
-            + incl(["MATH 214", "MATH 217", "MATH 417"])
-            + incl(["MATH 215", "MATH 216"]));
-        }
-    },
     engrStats: {
         name: "Engineering Stats",
         max: 4,
         func: function() {
             return (incl(["STATS 250", "STATS 280", "STATS 412", "STATS 426", "EECS 301", "EECS 401", "IOE 265"], 4));
-        }
-    },
-    elective: {
-        name: "Electives",
-        max: 15,
-        func: function() {
-            let n = 0;
-            while (classes.length > 0){
-                classes.splice(0, 1);
-                n += 4; // need to fix with API
-            }
-
-            return (Math.min(n, reqs.elective.max));
         }
     },
     intellectualBreadth: {
@@ -362,28 +434,6 @@ let reqs = {
             return reqs.intellectualBreadth.max;
         }
     },
-    CSCore: {
-        name: "CS Core Requirements",
-        max: 25,
-        func: function() {
-            return (incl(["EECS 203", "MATH 465", "MATH 565"])
-            + incl("TCHNCLCM 300") + parseDB(crs.eecs.cs, "EECS"));
-        }
-    },
-    CSMDE: {
-        name: "CS MDE",
-        max: 4,
-        func: function () {
-            return(parseDB(crs.eecs.csmde, "EECS"));
-        }
-    },
-    EECSMDE: {
-        name: "EECS MDE",
-        max: 4,
-        func: function() {
-            return (incl("EECS 496") + incl("TCHNCLCM 497"));
-        }
-    },
     ULCS: {
         name: "Upper Level CS",
         max: 16,
@@ -391,27 +441,4 @@ let reqs = {
             return(parseDB(crs.eecs.ulcs, "EECS"))
         }
     },
-    CSEFlexTechs: {
-        name: "CSE Flex Techs",
-        max: 12,
-        func: function () {
-            let n = 0;
-            for (let i = 0; i < classes.length; i++) { // sorts through remaining classes
-                if (crs.includesReqInSubject("flex", classes[i])) {
-                    alert (crs.number(classes[i]) in crs[crs.subject(classes[i]).toLowerCase()]["flex"]);
-                    alert(crs.includesCourseInReq("MATH 412", "flex"));
-                    if (crs.includesCourseInReq(classes[i], "flex")) {
-                        classes.splice(i, 1);
-                        i--;
-                        n += crs.credits(classes[i]);
-                    }
-                }
-            }
-
-            if (n <= reqs.CSEFlexTechs.max)
-                return n;
-
-            return reqs.CSEFlexTechs.max;
-        }
-    }
 };

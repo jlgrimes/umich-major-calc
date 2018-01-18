@@ -1,21 +1,24 @@
-var classes = [];
-
 function compute() {
     $(".output").empty();
     for (let i in majors)
         majors[i].applicableCredits = 0; // reinitializes applicable credit count
 
     storeClasses();
+    deleteGarbage();
 
     for (let i in majors) {
         majors[i].program(classes);
     }
-
-    $(".output").append("<div>Total CS Credits: " + majors.CS.applicableCredits + "<div>");
 }
 
 function storeClasses() {
     classes = $("#classes").val().split('\n');
+}
+
+function deleteGarbage() {
+    for (let i in classes)
+        if (classes[i] === "")
+            classes.splice(i, 1);
 }
 
 function incl(options) {
