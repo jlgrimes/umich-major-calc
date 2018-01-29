@@ -27,7 +27,7 @@ let db = {
         return n;
     },
 
-    cCap: function(obj) {
+    cap: function(obj) {
         return Math.min(obj.func(), obj.max);
     },
 
@@ -39,7 +39,7 @@ let db = {
         //$(".output").append('<div class="box col2"></div>');
         //$(".output").append("<div class='box col2'><p>" + major.name + "</p>");
         for (let i in creditDist) {
-            let c = db.cCap(creditDist[i]);
+            let c = db.cap(creditDist[i]);
             text += "<p>" + creditDist[i].name + ": " + c + " out of " + creditDist[i].max + "</p>";
             major.applicableCredits += c; // adds total course count with the cap
         }
