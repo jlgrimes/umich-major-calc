@@ -171,5 +171,7 @@ Returns an object of colors (primary, light, dark) for the selected hue.
 
 ### Course Requirements
 [Computer Engineering](https://www.eecs.umich.edu/eecs/undergraduate/ugce/CE_Program_Guide.pdf)
+
 [Computer Science LSA](https://www.eecs.umich.edu/eecs/undergraduate/computer-science/lsa-docs/17_18_cs_lsa.pdf)
+
 [Computer Science ENG](http://eecs.umich.edu/eecs/undergraduate/computer-science/16_17_cs_eng.pdf)
