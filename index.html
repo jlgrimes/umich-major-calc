@@ -5,14 +5,30 @@
     <title>UMich Major Calc</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- jQuery -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <link rel="stylesheet" HREF="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Materialize CSS -->
 
     <script src="source.js"></script>
-    <script src="db.js"></script>
-    <script src="cookies.js"></script>
+    <!-- Source -->
+
+    <script src="db/db-helpers.js"></script>
+    <script src="db/db.js"></script>
+    <!-- Database -->
+
+    <script src="extra/cookies.js"></script>
+    <!-- Extra -->
+
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="styles/colors.js"></script>
+    <!-- Styles -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+
 </head>
 <body>
     <p>Enter a list of classes</p>
@@ -21,6 +37,8 @@
     <button class="waves-effect waves-light btn" onclick="setCache()">Save</button>
     <button class="waves-effect waves-light btn" onclick="parseCache()">Open</button>
 
-    <div class="output"></div>
+    <div class="output row">
+
+    </div>
 </body>
 </html>

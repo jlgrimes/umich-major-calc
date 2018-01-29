@@ -1,22 +1,34 @@
 function compute() {
-    $(".output").empty();
-    for (let i in majors)
-        majors[i].applicableCredits = 0; // reinitializes applicable credit count
-
+    reinitializeSession();
     storeClasses();
     deleteGarbage();
 
-    for (let i in majors) {
-        majors[i].program(classes);
+    for (var i in majors) {
+        reinitializeMajor();
+        majors[i].program();
+        db.print(majors[i]);
     }
+}
+
+function reinitializeSession() {
+    $(".output").empty();
+    for (var i in majors)
+        majors[i].applicableCredits = 0; // reinitializes applicable credit count
+
+    colorIndex = 0;
+}
+
+function reinitializeMajor() {
+    classes = classesBackup.slice(0);
 }
 
 function storeClasses() {
     classes = $("#classes").val().split('\n');
+    classesBackup = classes;
 }
 
 function deleteGarbage() {
-    for (let i in classes)
+    for (var i in classes)
         if (classes[i] === "")
             classes.splice(i, 1);
 }
@@ -30,7 +42,7 @@ function incl(options) {
 
 function inclLoop(options){
     if (Array.isArray(options)) {
-        for (let i in options) {
+        for (var i in options) {
             if (classes.includes(options[i])) {
                 classes.splice(classes.indexOf(options[i]), 1);
                 return crs.credits(options[i]);
@@ -45,19 +57,4 @@ function inclLoop(options){
     }
 
     return 0;
-}
-
-function parseDB(db, prefix) {
-    let n = 0;
-    for (let i in db) {
-        if (classes.includes(prefix.toUpperCase() + " " + db[i][0])) {
-            classes.splice(classes.indexOf(prefix + " " + db[i][0]), 1);
-            n += db[i][1];
-        }
-    }
-    return n;
-}
-
-function cCap(obj) {
-    return Math.min(obj.func(), obj.max);
 }
